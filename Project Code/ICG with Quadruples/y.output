@@ -1,0 +1,1898 @@
+Nonterminals useless in grammar
+
+   T_V
+   RELOP
+   bin_boolop
+   un_arop
+   un_boolop
+
+
+Terminals unused in grammar
+
+   T_lteq
+   T_gteq
+   T_neq
+   T_noteq
+   T_eqeq
+   T_incr
+   T_decr
+   BREAK
+   CONTINUE
+   T_ques
+   T_colon
+
+
+Rules useless in grammar
+
+   85 T_V: ID
+
+   86 RELOP: T_lt
+   87      | T_gt
+   88      | T_lteq
+   89      | T_gteq
+   90      | T_neq
+   91      | T_eqeq
+
+   92 bin_boolop: T_and
+   93           | T_or
+
+   94 un_arop: T_incr
+   95        | T_decr
+
+   96 un_boolop: T_not
+
+
+Grammar
+
+    0 $accept: S $end
+
+    1 S: START
+
+    2 START: INCLUDE T_lt H T_gt MAIN
+    3      | INCLUDE "\"" H "\"" MAIN
+
+    4 MAIN: VOID MAINTOK BODY
+    5     | INT MAINTOK BODY
+
+    6 BODY: '{' C '}'
+
+    7 C: C statement ';'
+    8  | C LOOPS
+    9  | statement ';'
+   10  | LOOPS
+
+   11 $@1: %empty
+
+   12 $@2: %empty
+
+   13 LOOPS: WHILE $@1 '(' COND ')' $@2 LOOPBODY
+
+   14 $@3: %empty
+
+   15 $@4: %empty
+
+   16 $@5: %empty
+
+   17 LOOPS: FOR '(' ASSIGN_EXPR $@3 ';' COND $@4 ';' statement $@5 ')' LOOPBODY
+
+   18 $@6: %empty
+
+   19 $@7: %empty
+
+   20 LOOPS: IF '(' COND ')' $@6 LOOPBODY $@7 A
+
+   21 A: ELSE LOOPBODY
+   22  | %empty
+
+   23 LOOPBODY: '{' LOOPC '}'
+   24         | ';'
+   25         | statement ';'
+
+   26 LOOPC: LOOPC statement ';'
+   27      | LOOPC LOOPS
+   28      | statement ';'
+   29      | LOOPS
+
+   30 statement: ASSIGN_EXPR
+   31          | EXP
+   32          | PRINT
+
+   33 COND: B
+
+   34 $@8: %empty
+
+   35 COND: B T_and $@8 COND
+
+   36 $@9: %empty
+
+   37 COND: B $@9 T_or COND
+   38     | T_not B
+
+   39 $@10: %empty
+
+   40 $@11: %empty
+
+   41 B: V T_eq $@10 T_eq $@11 LIT
+
+   42 $@12: %empty
+
+   43 B: V T_gt $@12 F
+
+   44 $@13: %empty
+
+   45 B: V T_lt $@13 F
+
+   46 $@14: %empty
+
+   47 $@15: %empty
+
+   48 B: V T_not $@14 T_eq $@15 LIT
+   49  | '(' B ')'
+   50  | V
+
+   51 $@16: %empty
+
+   52 F: T_eq $@16 LIT
+   53  | LIT
+
+   54 V: ID
+
+   55 $@17: %empty
+
+   56 $@18: %empty
+
+   57 ASSIGN_EXPR: LIT $@17 T_eq $@18 EXP
+
+   58 $@19: %empty
+
+   59 $@20: %empty
+
+   60 ASSIGN_EXPR: TYPE LIT $@19 T_eq $@20 EXP
+
+   61 EXP: ADDSUB
+
+   62 $@21: %empty
+
+   63 EXP: EXP T_lt $@21 EXP
+
+   64 $@22: %empty
+
+   65 EXP: EXP T_gt $@22 EXP
+
+   66 ADDSUB: TERM
+
+   67 $@23: %empty
+
+   68 ADDSUB: EXP T_pl $@23 TERM
+
+   69 $@24: %empty
+
+   70 ADDSUB: EXP T_min $@24 TERM
+
+   71 TERM: FACTOR
+
+   72 $@25: %empty
+
+   73 TERM: TERM T_mul $@25 FACTOR
+
+   74 $@26: %empty
+
+   75 TERM: TERM T_div $@26 FACTOR
+
+   76 FACTOR: LIT
+   77       | '(' EXP ')'
+
+   78 PRINT: COUT T_lt T_lt STRING
+   79      | COUT T_lt T_lt STRING T_lt T_lt ENDL
+
+   80 LIT: ID
+   81    | NUM
+
+   82 TYPE: INT
+   83     | CHAR
+   84     | FLOAT
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 13 17 20 49 77
+')' (41) 13 17 20 49 77
+';' (59) 7 9 17 24 25 26 28
+'{' (123) 6 23
+'}' (125) 6 23
+error (256)
+ID (258) 54 80
+NUM (259) 81
+T_lt (260) 2 45 63 78 79
+T_gt (261) 2 43 65
+T_lteq (262)
+T_gteq (263)
+T_neq (264)
+T_noteq (265)
+T_eqeq (266)
+T_and (267) 35
+T_or (268) 37
+T_incr (269)
+T_decr (270)
+T_not (271) 38 48
+T_eq (272) 41 48 52 57 60
+WHILE (273) 13
+INT (274) 5 82
+CHAR (275) 83
+FLOAT (276) 84
+VOID (277) 4
+H (278) 2 3
+MAINTOK (279) 4 5
+INCLUDE (280) 2 3
+BREAK (281)
+CONTINUE (282)
+IF (283) 20
+ELSE (284) 21
+COUT (285) 78 79
+STRING (286) 78 79
+FOR (287) 17
+ENDL (288) 79
+T_ques (289)
+T_colon (290)
+T_pl (291) 68
+T_min (292) 70
+T_mul (293) 73
+T_div (294) 75
+"\"" (295) 3
+
+
+Nonterminals, with rules where they appear
+
+$accept (46)
+    on left: 0
+S (47)
+    on left: 1, on right: 0
+START (48)
+    on left: 2 3, on right: 1
+MAIN (49)
+    on left: 4 5, on right: 2 3
+BODY (50)
+    on left: 6, on right: 4 5
+C (51)
+    on left: 7 8 9 10, on right: 6 7 8
+LOOPS (52)
+    on left: 13 17 20, on right: 8 10 27 29
+$@1 (53)
+    on left: 11, on right: 13
+$@2 (54)
+    on left: 12, on right: 13
+$@3 (55)
+    on left: 14, on right: 17
+$@4 (56)
+    on left: 15, on right: 17
+$@5 (57)
+    on left: 16, on right: 17
+$@6 (58)
+    on left: 18, on right: 20
+$@7 (59)
+    on left: 19, on right: 20
+A (60)
+    on left: 21 22, on right: 20
+LOOPBODY (61)
+    on left: 23 24 25, on right: 13 17 20 21
+LOOPC (62)
+    on left: 26 27 28 29, on right: 23 26 27
+statement (63)
+    on left: 30 31 32, on right: 7 9 17 25 26 28
+COND (64)
+    on left: 33 35 37 38, on right: 13 17 20 35 37
+$@8 (65)
+    on left: 34, on right: 35
+$@9 (66)
+    on left: 36, on right: 37
+B (67)
+    on left: 41 43 45 48 49 50, on right: 33 35 37 38 49
+$@10 (68)
+    on left: 39, on right: 41
+$@11 (69)
+    on left: 40, on right: 41
+$@12 (70)
+    on left: 42, on right: 43
+$@13 (71)
+    on left: 44, on right: 45
+$@14 (72)
+    on left: 46, on right: 48
+$@15 (73)
+    on left: 47, on right: 48
+F (74)
+    on left: 52 53, on right: 43 45
+$@16 (75)
+    on left: 51, on right: 52
+V (76)
+    on left: 54, on right: 41 43 45 48 50
+ASSIGN_EXPR (77)
+    on left: 57 60, on right: 17 30
+$@17 (78)
+    on left: 55, on right: 57
+$@18 (79)
+    on left: 56, on right: 57
+$@19 (80)
+    on left: 58, on right: 60
+$@20 (81)
+    on left: 59, on right: 60
+EXP (82)
+    on left: 61 63 65, on right: 31 57 60 63 65 68 70 77
+$@21 (83)
+    on left: 62, on right: 63
+$@22 (84)
+    on left: 64, on right: 65
+ADDSUB (85)
+    on left: 66 68 70, on right: 61
+$@23 (86)
+    on left: 67, on right: 68
+$@24 (87)
+    on left: 69, on right: 70
+TERM (88)
+    on left: 71 73 75, on right: 66 68 70 73 75
+$@25 (89)
+    on left: 72, on right: 73
+$@26 (90)
+    on left: 74, on right: 75
+FACTOR (91)
+    on left: 76 77, on right: 71 73 75
+PRINT (92)
+    on left: 78 79, on right: 32
+LIT (93)
+    on left: 80 81, on right: 41 48 52 53 57 60 76
+TYPE (94)
+    on left: 82 83 84, on right: 60
+
+
+State 0
+
+    0 $accept: . S $end
+
+    INCLUDE  shift, and go to state 1
+
+    S      go to state 2
+    START  go to state 3
+
+
+State 1
+
+    2 START: INCLUDE . T_lt H T_gt MAIN
+    3      | INCLUDE . "\"" H "\"" MAIN
+
+    T_lt  shift, and go to state 4
+    "\""  shift, and go to state 5
+
+
+State 2
+
+    0 $accept: S . $end
+
+    $end  shift, and go to state 6
+
+
+State 3
+
+    1 S: START .
+
+    $default  reduce using rule 1 (S)
+
+
+State 4
+
+    2 START: INCLUDE T_lt . H T_gt MAIN
+
+    H  shift, and go to state 7
+
+
+State 5
+
+    3 START: INCLUDE "\"" . H "\"" MAIN
+
+    H  shift, and go to state 8
+
+
+State 6
+
+    0 $accept: S $end .
+
+    $default  accept
+
+
+State 7
+
+    2 START: INCLUDE T_lt H . T_gt MAIN
+
+    T_gt  shift, and go to state 9
+
+
+State 8
+
+    3 START: INCLUDE "\"" H . "\"" MAIN
+
+    "\""  shift, and go to state 10
+
+
+State 9
+
+    2 START: INCLUDE T_lt H T_gt . MAIN
+
+    INT   shift, and go to state 11
+    VOID  shift, and go to state 12
+
+    MAIN  go to state 13
+
+
+State 10
+
+    3 START: INCLUDE "\"" H "\"" . MAIN
+
+    INT   shift, and go to state 11
+    VOID  shift, and go to state 12
+
+    MAIN  go to state 14
+
+
+State 11
+
+    5 MAIN: INT . MAINTOK BODY
+
+    MAINTOK  shift, and go to state 15
+
+
+State 12
+
+    4 MAIN: VOID . MAINTOK BODY
+
+    MAINTOK  shift, and go to state 16
+
+
+State 13
+
+    2 START: INCLUDE T_lt H T_gt MAIN .
+
+    $default  reduce using rule 2 (START)
+
+
+State 14
+
+    3 START: INCLUDE "\"" H "\"" MAIN .
+
+    $default  reduce using rule 3 (START)
+
+
+State 15
+
+    5 MAIN: INT MAINTOK . BODY
+
+    '{'  shift, and go to state 17
+
+    BODY  go to state 18
+
+
+State 16
+
+    4 MAIN: VOID MAINTOK . BODY
+
+    '{'  shift, and go to state 17
+
+    BODY  go to state 19
+
+
+State 17
+
+    6 BODY: '{' . C '}'
+
+    ID     shift, and go to state 20
+    NUM    shift, and go to state 21
+    WHILE  shift, and go to state 22
+    INT    shift, and go to state 23
+    CHAR   shift, and go to state 24
+    FLOAT  shift, and go to state 25
+    IF     shift, and go to state 26
+    COUT   shift, and go to state 27
+    FOR    shift, and go to state 28
+    '('    shift, and go to state 29
+
+    C            go to state 30
+    LOOPS        go to state 31
+    statement    go to state 32
+    ASSIGN_EXPR  go to state 33
+    EXP          go to state 34
+    ADDSUB       go to state 35
+    TERM         go to state 36
+    FACTOR       go to state 37
+    PRINT        go to state 38
+    LIT          go to state 39
+    TYPE         go to state 40
+
+
+State 18
+
+    5 MAIN: INT MAINTOK BODY .
+
+    $default  reduce using rule 5 (MAIN)
+
+
+State 19
+
+    4 MAIN: VOID MAINTOK BODY .
+
+    $default  reduce using rule 4 (MAIN)
+
+
+State 20
+
+   80 LIT: ID .
+
+    $default  reduce using rule 80 (LIT)
+
+
+State 21
+
+   81 LIT: NUM .
+
+    $default  reduce using rule 81 (LIT)
+
+
+State 22
+
+   13 LOOPS: WHILE . $@1 '(' COND ')' $@2 LOOPBODY
+
+    $default  reduce using rule 11 ($@1)
+
+    $@1  go to state 41
+
+
+State 23
+
+   82 TYPE: INT .
+
+    $default  reduce using rule 82 (TYPE)
+
+
+State 24
+
+   83 TYPE: CHAR .
+
+    $default  reduce using rule 83 (TYPE)
+
+
+State 25
+
+   84 TYPE: FLOAT .
+
+    $default  reduce using rule 84 (TYPE)
+
+
+State 26
+
+   20 LOOPS: IF . '(' COND ')' $@6 LOOPBODY $@7 A
+
+    '('  shift, and go to state 42
+
+
+State 27
+
+   78 PRINT: COUT . T_lt T_lt STRING
+   79      | COUT . T_lt T_lt STRING T_lt T_lt ENDL
+
+    T_lt  shift, and go to state 43
+
+
+State 28
+
+   17 LOOPS: FOR . '(' ASSIGN_EXPR $@3 ';' COND $@4 ';' statement $@5 ')' LOOPBODY
+
+    '('  shift, and go to state 44
+
+
+State 29
+
+   77 FACTOR: '(' . EXP ')'
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+    '('  shift, and go to state 29
+
+    EXP     go to state 45
+    ADDSUB  go to state 35
+    TERM    go to state 36
+    FACTOR  go to state 37
+    LIT     go to state 46
+
+
+State 30
+
+    6 BODY: '{' C . '}'
+    7 C: C . statement ';'
+    8  | C . LOOPS
+
+    ID     shift, and go to state 20
+    NUM    shift, and go to state 21
+    WHILE  shift, and go to state 22
+    INT    shift, and go to state 23
+    CHAR   shift, and go to state 24
+    FLOAT  shift, and go to state 25
+    IF     shift, and go to state 26
+    COUT   shift, and go to state 27
+    FOR    shift, and go to state 28
+    '}'    shift, and go to state 47
+    '('    shift, and go to state 29
+
+    LOOPS        go to state 48
+    statement    go to state 49
+    ASSIGN_EXPR  go to state 33
+    EXP          go to state 34
+    ADDSUB       go to state 35
+    TERM         go to state 36
+    FACTOR       go to state 37
+    PRINT        go to state 38
+    LIT          go to state 39
+    TYPE         go to state 40
+
+
+State 31
+
+   10 C: LOOPS .
+
+    $default  reduce using rule 10 (C)
+
+
+State 32
+
+    9 C: statement . ';'
+
+    ';'  shift, and go to state 50
+
+
+State 33
+
+   30 statement: ASSIGN_EXPR .
+
+    $default  reduce using rule 30 (statement)
+
+
+State 34
+
+   31 statement: EXP .
+   63 EXP: EXP . T_lt $@21 EXP
+   65    | EXP . T_gt $@22 EXP
+   68 ADDSUB: EXP . T_pl $@23 TERM
+   70       | EXP . T_min $@24 TERM
+
+    T_lt   shift, and go to state 51
+    T_gt   shift, and go to state 52
+    T_pl   shift, and go to state 53
+    T_min  shift, and go to state 54
+
+    $default  reduce using rule 31 (statement)
+
+
+State 35
+
+   61 EXP: ADDSUB .
+
+    $default  reduce using rule 61 (EXP)
+
+
+State 36
+
+   66 ADDSUB: TERM .
+   73 TERM: TERM . T_mul $@25 FACTOR
+   75     | TERM . T_div $@26 FACTOR
+
+    T_mul  shift, and go to state 55
+    T_div  shift, and go to state 56
+
+    $default  reduce using rule 66 (ADDSUB)
+
+
+State 37
+
+   71 TERM: FACTOR .
+
+    $default  reduce using rule 71 (TERM)
+
+
+State 38
+
+   32 statement: PRINT .
+
+    $default  reduce using rule 32 (statement)
+
+
+State 39
+
+   57 ASSIGN_EXPR: LIT . $@17 T_eq $@18 EXP
+   76 FACTOR: LIT .
+
+    T_eq      reduce using rule 55 ($@17)
+    $default  reduce using rule 76 (FACTOR)
+
+    $@17  go to state 57
+
+
+State 40
+
+   60 ASSIGN_EXPR: TYPE . LIT $@19 T_eq $@20 EXP
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+
+    LIT  go to state 58
+
+
+State 41
+
+   13 LOOPS: WHILE $@1 . '(' COND ')' $@2 LOOPBODY
+
+    '('  shift, and go to state 59
+
+
+State 42
+
+   20 LOOPS: IF '(' . COND ')' $@6 LOOPBODY $@7 A
+
+    ID     shift, and go to state 60
+    T_not  shift, and go to state 61
+    '('    shift, and go to state 62
+
+    COND  go to state 63
+    B     go to state 64
+    V     go to state 65
+
+
+State 43
+
+   78 PRINT: COUT T_lt . T_lt STRING
+   79      | COUT T_lt . T_lt STRING T_lt T_lt ENDL
+
+    T_lt  shift, and go to state 66
+
+
+State 44
+
+   17 LOOPS: FOR '(' . ASSIGN_EXPR $@3 ';' COND $@4 ';' statement $@5 ')' LOOPBODY
+
+    ID     shift, and go to state 20
+    NUM    shift, and go to state 21
+    INT    shift, and go to state 23
+    CHAR   shift, and go to state 24
+    FLOAT  shift, and go to state 25
+
+    ASSIGN_EXPR  go to state 67
+    LIT          go to state 68
+    TYPE         go to state 40
+
+
+State 45
+
+   63 EXP: EXP . T_lt $@21 EXP
+   65    | EXP . T_gt $@22 EXP
+   68 ADDSUB: EXP . T_pl $@23 TERM
+   70       | EXP . T_min $@24 TERM
+   77 FACTOR: '(' EXP . ')'
+
+    T_lt   shift, and go to state 51
+    T_gt   shift, and go to state 52
+    T_pl   shift, and go to state 53
+    T_min  shift, and go to state 54
+    ')'    shift, and go to state 69
+
+
+State 46
+
+   76 FACTOR: LIT .
+
+    $default  reduce using rule 76 (FACTOR)
+
+
+State 47
+
+    6 BODY: '{' C '}' .
+
+    $default  reduce using rule 6 (BODY)
+
+
+State 48
+
+    8 C: C LOOPS .
+
+    $default  reduce using rule 8 (C)
+
+
+State 49
+
+    7 C: C statement . ';'
+
+    ';'  shift, and go to state 70
+
+
+State 50
+
+    9 C: statement ';' .
+
+    $default  reduce using rule 9 (C)
+
+
+State 51
+
+   63 EXP: EXP T_lt . $@21 EXP
+
+    $default  reduce using rule 62 ($@21)
+
+    $@21  go to state 71
+
+
+State 52
+
+   65 EXP: EXP T_gt . $@22 EXP
+
+    $default  reduce using rule 64 ($@22)
+
+    $@22  go to state 72
+
+
+State 53
+
+   68 ADDSUB: EXP T_pl . $@23 TERM
+
+    $default  reduce using rule 67 ($@23)
+
+    $@23  go to state 73
+
+
+State 54
+
+   70 ADDSUB: EXP T_min . $@24 TERM
+
+    $default  reduce using rule 69 ($@24)
+
+    $@24  go to state 74
+
+
+State 55
+
+   73 TERM: TERM T_mul . $@25 FACTOR
+
+    $default  reduce using rule 72 ($@25)
+
+    $@25  go to state 75
+
+
+State 56
+
+   75 TERM: TERM T_div . $@26 FACTOR
+
+    $default  reduce using rule 74 ($@26)
+
+    $@26  go to state 76
+
+
+State 57
+
+   57 ASSIGN_EXPR: LIT $@17 . T_eq $@18 EXP
+
+    T_eq  shift, and go to state 77
+
+
+State 58
+
+   60 ASSIGN_EXPR: TYPE LIT . $@19 T_eq $@20 EXP
+
+    $default  reduce using rule 58 ($@19)
+
+    $@19  go to state 78
+
+
+State 59
+
+   13 LOOPS: WHILE $@1 '(' . COND ')' $@2 LOOPBODY
+
+    ID     shift, and go to state 60
+    T_not  shift, and go to state 61
+    '('    shift, and go to state 62
+
+    COND  go to state 79
+    B     go to state 64
+    V     go to state 65
+
+
+State 60
+
+   54 V: ID .
+
+    $default  reduce using rule 54 (V)
+
+
+State 61
+
+   38 COND: T_not . B
+
+    ID   shift, and go to state 60
+    '('  shift, and go to state 62
+
+    B  go to state 80
+    V  go to state 65
+
+
+State 62
+
+   49 B: '(' . B ')'
+
+    ID   shift, and go to state 60
+    '('  shift, and go to state 62
+
+    B  go to state 81
+    V  go to state 65
+
+
+State 63
+
+   20 LOOPS: IF '(' COND . ')' $@6 LOOPBODY $@7 A
+
+    ')'  shift, and go to state 82
+
+
+State 64
+
+   33 COND: B .
+   35     | B . T_and $@8 COND
+   37     | B . $@9 T_or COND
+
+    T_and  shift, and go to state 83
+
+    T_or      reduce using rule 36 ($@9)
+    $default  reduce using rule 33 (COND)
+
+    $@9  go to state 84
+
+
+State 65
+
+   41 B: V . T_eq $@10 T_eq $@11 LIT
+   43  | V . T_gt $@12 F
+   45  | V . T_lt $@13 F
+   48  | V . T_not $@14 T_eq $@15 LIT
+   50  | V .
+
+    T_lt   shift, and go to state 85
+    T_gt   shift, and go to state 86
+    T_not  shift, and go to state 87
+    T_eq   shift, and go to state 88
+
+    $default  reduce using rule 50 (B)
+
+
+State 66
+
+   78 PRINT: COUT T_lt T_lt . STRING
+   79      | COUT T_lt T_lt . STRING T_lt T_lt ENDL
+
+    STRING  shift, and go to state 89
+
+
+State 67
+
+   17 LOOPS: FOR '(' ASSIGN_EXPR . $@3 ';' COND $@4 ';' statement $@5 ')' LOOPBODY
+
+    $default  reduce using rule 14 ($@3)
+
+    $@3  go to state 90
+
+
+State 68
+
+   57 ASSIGN_EXPR: LIT . $@17 T_eq $@18 EXP
+
+    $default  reduce using rule 55 ($@17)
+
+    $@17  go to state 57
+
+
+State 69
+
+   77 FACTOR: '(' EXP ')' .
+
+    $default  reduce using rule 77 (FACTOR)
+
+
+State 70
+
+    7 C: C statement ';' .
+
+    $default  reduce using rule 7 (C)
+
+
+State 71
+
+   63 EXP: EXP T_lt $@21 . EXP
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+    '('  shift, and go to state 29
+
+    EXP     go to state 91
+    ADDSUB  go to state 35
+    TERM    go to state 36
+    FACTOR  go to state 37
+    LIT     go to state 46
+
+
+State 72
+
+   65 EXP: EXP T_gt $@22 . EXP
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+    '('  shift, and go to state 29
+
+    EXP     go to state 92
+    ADDSUB  go to state 35
+    TERM    go to state 36
+    FACTOR  go to state 37
+    LIT     go to state 46
+
+
+State 73
+
+   68 ADDSUB: EXP T_pl $@23 . TERM
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+    '('  shift, and go to state 29
+
+    TERM    go to state 93
+    FACTOR  go to state 37
+    LIT     go to state 46
+
+
+State 74
+
+   70 ADDSUB: EXP T_min $@24 . TERM
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+    '('  shift, and go to state 29
+
+    TERM    go to state 94
+    FACTOR  go to state 37
+    LIT     go to state 46
+
+
+State 75
+
+   73 TERM: TERM T_mul $@25 . FACTOR
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+    '('  shift, and go to state 29
+
+    FACTOR  go to state 95
+    LIT     go to state 46
+
+
+State 76
+
+   75 TERM: TERM T_div $@26 . FACTOR
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+    '('  shift, and go to state 29
+
+    FACTOR  go to state 96
+    LIT     go to state 46
+
+
+State 77
+
+   57 ASSIGN_EXPR: LIT $@17 T_eq . $@18 EXP
+
+    $default  reduce using rule 56 ($@18)
+
+    $@18  go to state 97
+
+
+State 78
+
+   60 ASSIGN_EXPR: TYPE LIT $@19 . T_eq $@20 EXP
+
+    T_eq  shift, and go to state 98
+
+
+State 79
+
+   13 LOOPS: WHILE $@1 '(' COND . ')' $@2 LOOPBODY
+
+    ')'  shift, and go to state 99
+
+
+State 80
+
+   38 COND: T_not B .
+
+    $default  reduce using rule 38 (COND)
+
+
+State 81
+
+   49 B: '(' B . ')'
+
+    ')'  shift, and go to state 100
+
+
+State 82
+
+   20 LOOPS: IF '(' COND ')' . $@6 LOOPBODY $@7 A
+
+    $default  reduce using rule 18 ($@6)
+
+    $@6  go to state 101
+
+
+State 83
+
+   35 COND: B T_and . $@8 COND
+
+    $default  reduce using rule 34 ($@8)
+
+    $@8  go to state 102
+
+
+State 84
+
+   37 COND: B $@9 . T_or COND
+
+    T_or  shift, and go to state 103
+
+
+State 85
+
+   45 B: V T_lt . $@13 F
+
+    $default  reduce using rule 44 ($@13)
+
+    $@13  go to state 104
+
+
+State 86
+
+   43 B: V T_gt . $@12 F
+
+    $default  reduce using rule 42 ($@12)
+
+    $@12  go to state 105
+
+
+State 87
+
+   48 B: V T_not . $@14 T_eq $@15 LIT
+
+    $default  reduce using rule 46 ($@14)
+
+    $@14  go to state 106
+
+
+State 88
+
+   41 B: V T_eq . $@10 T_eq $@11 LIT
+
+    $default  reduce using rule 39 ($@10)
+
+    $@10  go to state 107
+
+
+State 89
+
+   78 PRINT: COUT T_lt T_lt STRING .
+   79      | COUT T_lt T_lt STRING . T_lt T_lt ENDL
+
+    T_lt  shift, and go to state 108
+
+    $default  reduce using rule 78 (PRINT)
+
+
+State 90
+
+   17 LOOPS: FOR '(' ASSIGN_EXPR $@3 . ';' COND $@4 ';' statement $@5 ')' LOOPBODY
+
+    ';'  shift, and go to state 109
+
+
+State 91
+
+   63 EXP: EXP . T_lt $@21 EXP
+   63    | EXP T_lt $@21 EXP .
+   65    | EXP . T_gt $@22 EXP
+   68 ADDSUB: EXP . T_pl $@23 TERM
+   70       | EXP . T_min $@24 TERM
+
+    T_pl   shift, and go to state 53
+    T_min  shift, and go to state 54
+
+    $default  reduce using rule 63 (EXP)
+
+
+State 92
+
+   63 EXP: EXP . T_lt $@21 EXP
+   65    | EXP . T_gt $@22 EXP
+   65    | EXP T_gt $@22 EXP .
+   68 ADDSUB: EXP . T_pl $@23 TERM
+   70       | EXP . T_min $@24 TERM
+
+    T_pl   shift, and go to state 53
+    T_min  shift, and go to state 54
+
+    $default  reduce using rule 65 (EXP)
+
+
+State 93
+
+   68 ADDSUB: EXP T_pl $@23 TERM .
+   73 TERM: TERM . T_mul $@25 FACTOR
+   75     | TERM . T_div $@26 FACTOR
+
+    T_mul  shift, and go to state 55
+    T_div  shift, and go to state 56
+
+    $default  reduce using rule 68 (ADDSUB)
+
+
+State 94
+
+   70 ADDSUB: EXP T_min $@24 TERM .
+   73 TERM: TERM . T_mul $@25 FACTOR
+   75     | TERM . T_div $@26 FACTOR
+
+    T_mul  shift, and go to state 55
+    T_div  shift, and go to state 56
+
+    $default  reduce using rule 70 (ADDSUB)
+
+
+State 95
+
+   73 TERM: TERM T_mul $@25 FACTOR .
+
+    $default  reduce using rule 73 (TERM)
+
+
+State 96
+
+   75 TERM: TERM T_div $@26 FACTOR .
+
+    $default  reduce using rule 75 (TERM)
+
+
+State 97
+
+   57 ASSIGN_EXPR: LIT $@17 T_eq $@18 . EXP
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+    '('  shift, and go to state 29
+
+    EXP     go to state 110
+    ADDSUB  go to state 35
+    TERM    go to state 36
+    FACTOR  go to state 37
+    LIT     go to state 46
+
+
+State 98
+
+   60 ASSIGN_EXPR: TYPE LIT $@19 T_eq . $@20 EXP
+
+    $default  reduce using rule 59 ($@20)
+
+    $@20  go to state 111
+
+
+State 99
+
+   13 LOOPS: WHILE $@1 '(' COND ')' . $@2 LOOPBODY
+
+    $default  reduce using rule 12 ($@2)
+
+    $@2  go to state 112
+
+
+State 100
+
+   49 B: '(' B ')' .
+
+    $default  reduce using rule 49 (B)
+
+
+State 101
+
+   20 LOOPS: IF '(' COND ')' $@6 . LOOPBODY $@7 A
+
+    ID     shift, and go to state 20
+    NUM    shift, and go to state 21
+    INT    shift, and go to state 23
+    CHAR   shift, and go to state 24
+    FLOAT  shift, and go to state 25
+    COUT   shift, and go to state 27
+    '{'    shift, and go to state 113
+    ';'    shift, and go to state 114
+    '('    shift, and go to state 29
+
+    LOOPBODY     go to state 115
+    statement    go to state 116
+    ASSIGN_EXPR  go to state 33
+    EXP          go to state 34
+    ADDSUB       go to state 35
+    TERM         go to state 36
+    FACTOR       go to state 37
+    PRINT        go to state 38
+    LIT          go to state 39
+    TYPE         go to state 40
+
+
+State 102
+
+   35 COND: B T_and $@8 . COND
+
+    ID     shift, and go to state 60
+    T_not  shift, and go to state 61
+    '('    shift, and go to state 62
+
+    COND  go to state 117
+    B     go to state 64
+    V     go to state 65
+
+
+State 103
+
+   37 COND: B $@9 T_or . COND
+
+    ID     shift, and go to state 60
+    T_not  shift, and go to state 61
+    '('    shift, and go to state 62
+
+    COND  go to state 118
+    B     go to state 64
+    V     go to state 65
+
+
+State 104
+
+   45 B: V T_lt $@13 . F
+
+    ID    shift, and go to state 20
+    NUM   shift, and go to state 21
+    T_eq  shift, and go to state 119
+
+    F    go to state 120
+    LIT  go to state 121
+
+
+State 105
+
+   43 B: V T_gt $@12 . F
+
+    ID    shift, and go to state 20
+    NUM   shift, and go to state 21
+    T_eq  shift, and go to state 119
+
+    F    go to state 122
+    LIT  go to state 121
+
+
+State 106
+
+   48 B: V T_not $@14 . T_eq $@15 LIT
+
+    T_eq  shift, and go to state 123
+
+
+State 107
+
+   41 B: V T_eq $@10 . T_eq $@11 LIT
+
+    T_eq  shift, and go to state 124
+
+
+State 108
+
+   79 PRINT: COUT T_lt T_lt STRING T_lt . T_lt ENDL
+
+    T_lt  shift, and go to state 125
+
+
+State 109
+
+   17 LOOPS: FOR '(' ASSIGN_EXPR $@3 ';' . COND $@4 ';' statement $@5 ')' LOOPBODY
+
+    ID     shift, and go to state 60
+    T_not  shift, and go to state 61
+    '('    shift, and go to state 62
+
+    COND  go to state 126
+    B     go to state 64
+    V     go to state 65
+
+
+State 110
+
+   57 ASSIGN_EXPR: LIT $@17 T_eq $@18 EXP .
+   63 EXP: EXP . T_lt $@21 EXP
+   65    | EXP . T_gt $@22 EXP
+   68 ADDSUB: EXP . T_pl $@23 TERM
+   70       | EXP . T_min $@24 TERM
+
+    T_lt   shift, and go to state 51
+    T_gt   shift, and go to state 52
+    T_pl   shift, and go to state 53
+    T_min  shift, and go to state 54
+
+    $default  reduce using rule 57 (ASSIGN_EXPR)
+
+
+State 111
+
+   60 ASSIGN_EXPR: TYPE LIT $@19 T_eq $@20 . EXP
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+    '('  shift, and go to state 29
+
+    EXP     go to state 127
+    ADDSUB  go to state 35
+    TERM    go to state 36
+    FACTOR  go to state 37
+    LIT     go to state 46
+
+
+State 112
+
+   13 LOOPS: WHILE $@1 '(' COND ')' $@2 . LOOPBODY
+
+    ID     shift, and go to state 20
+    NUM    shift, and go to state 21
+    INT    shift, and go to state 23
+    CHAR   shift, and go to state 24
+    FLOAT  shift, and go to state 25
+    COUT   shift, and go to state 27
+    '{'    shift, and go to state 113
+    ';'    shift, and go to state 114
+    '('    shift, and go to state 29
+
+    LOOPBODY     go to state 128
+    statement    go to state 116
+    ASSIGN_EXPR  go to state 33
+    EXP          go to state 34
+    ADDSUB       go to state 35
+    TERM         go to state 36
+    FACTOR       go to state 37
+    PRINT        go to state 38
+    LIT          go to state 39
+    TYPE         go to state 40
+
+
+State 113
+
+   23 LOOPBODY: '{' . LOOPC '}'
+
+    ID     shift, and go to state 20
+    NUM    shift, and go to state 21
+    WHILE  shift, and go to state 22
+    INT    shift, and go to state 23
+    CHAR   shift, and go to state 24
+    FLOAT  shift, and go to state 25
+    IF     shift, and go to state 26
+    COUT   shift, and go to state 27
+    FOR    shift, and go to state 28
+    '('    shift, and go to state 29
+
+    LOOPS        go to state 129
+    LOOPC        go to state 130
+    statement    go to state 131
+    ASSIGN_EXPR  go to state 33
+    EXP          go to state 34
+    ADDSUB       go to state 35
+    TERM         go to state 36
+    FACTOR       go to state 37
+    PRINT        go to state 38
+    LIT          go to state 39
+    TYPE         go to state 40
+
+
+State 114
+
+   24 LOOPBODY: ';' .
+
+    $default  reduce using rule 24 (LOOPBODY)
+
+
+State 115
+
+   20 LOOPS: IF '(' COND ')' $@6 LOOPBODY . $@7 A
+
+    $default  reduce using rule 19 ($@7)
+
+    $@7  go to state 132
+
+
+State 116
+
+   25 LOOPBODY: statement . ';'
+
+    ';'  shift, and go to state 133
+
+
+State 117
+
+   35 COND: B T_and $@8 COND .
+
+    $default  reduce using rule 35 (COND)
+
+
+State 118
+
+   37 COND: B $@9 T_or COND .
+
+    $default  reduce using rule 37 (COND)
+
+
+State 119
+
+   52 F: T_eq . $@16 LIT
+
+    $default  reduce using rule 51 ($@16)
+
+    $@16  go to state 134
+
+
+State 120
+
+   45 B: V T_lt $@13 F .
+
+    $default  reduce using rule 45 (B)
+
+
+State 121
+
+   53 F: LIT .
+
+    $default  reduce using rule 53 (F)
+
+
+State 122
+
+   43 B: V T_gt $@12 F .
+
+    $default  reduce using rule 43 (B)
+
+
+State 123
+
+   48 B: V T_not $@14 T_eq . $@15 LIT
+
+    $default  reduce using rule 47 ($@15)
+
+    $@15  go to state 135
+
+
+State 124
+
+   41 B: V T_eq $@10 T_eq . $@11 LIT
+
+    $default  reduce using rule 40 ($@11)
+
+    $@11  go to state 136
+
+
+State 125
+
+   79 PRINT: COUT T_lt T_lt STRING T_lt T_lt . ENDL
+
+    ENDL  shift, and go to state 137
+
+
+State 126
+
+   17 LOOPS: FOR '(' ASSIGN_EXPR $@3 ';' COND . $@4 ';' statement $@5 ')' LOOPBODY
+
+    $default  reduce using rule 15 ($@4)
+
+    $@4  go to state 138
+
+
+State 127
+
+   60 ASSIGN_EXPR: TYPE LIT $@19 T_eq $@20 EXP .
+   63 EXP: EXP . T_lt $@21 EXP
+   65    | EXP . T_gt $@22 EXP
+   68 ADDSUB: EXP . T_pl $@23 TERM
+   70       | EXP . T_min $@24 TERM
+
+    T_lt   shift, and go to state 51
+    T_gt   shift, and go to state 52
+    T_pl   shift, and go to state 53
+    T_min  shift, and go to state 54
+
+    $default  reduce using rule 60 (ASSIGN_EXPR)
+
+
+State 128
+
+   13 LOOPS: WHILE $@1 '(' COND ')' $@2 LOOPBODY .
+
+    $default  reduce using rule 13 (LOOPS)
+
+
+State 129
+
+   29 LOOPC: LOOPS .
+
+    $default  reduce using rule 29 (LOOPC)
+
+
+State 130
+
+   23 LOOPBODY: '{' LOOPC . '}'
+   26 LOOPC: LOOPC . statement ';'
+   27      | LOOPC . LOOPS
+
+    ID     shift, and go to state 20
+    NUM    shift, and go to state 21
+    WHILE  shift, and go to state 22
+    INT    shift, and go to state 23
+    CHAR   shift, and go to state 24
+    FLOAT  shift, and go to state 25
+    IF     shift, and go to state 26
+    COUT   shift, and go to state 27
+    FOR    shift, and go to state 28
+    '}'    shift, and go to state 139
+    '('    shift, and go to state 29
+
+    LOOPS        go to state 140
+    statement    go to state 141
+    ASSIGN_EXPR  go to state 33
+    EXP          go to state 34
+    ADDSUB       go to state 35
+    TERM         go to state 36
+    FACTOR       go to state 37
+    PRINT        go to state 38
+    LIT          go to state 39
+    TYPE         go to state 40
+
+
+State 131
+
+   28 LOOPC: statement . ';'
+
+    ';'  shift, and go to state 142
+
+
+State 132
+
+   20 LOOPS: IF '(' COND ')' $@6 LOOPBODY $@7 . A
+
+    ELSE  shift, and go to state 143
+
+    $default  reduce using rule 22 (A)
+
+    A  go to state 144
+
+
+State 133
+
+   25 LOOPBODY: statement ';' .
+
+    $default  reduce using rule 25 (LOOPBODY)
+
+
+State 134
+
+   52 F: T_eq $@16 . LIT
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+
+    LIT  go to state 145
+
+
+State 135
+
+   48 B: V T_not $@14 T_eq $@15 . LIT
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+
+    LIT  go to state 146
+
+
+State 136
+
+   41 B: V T_eq $@10 T_eq $@11 . LIT
+
+    ID   shift, and go to state 20
+    NUM  shift, and go to state 21
+
+    LIT  go to state 147
+
+
+State 137
+
+   79 PRINT: COUT T_lt T_lt STRING T_lt T_lt ENDL .
+
+    $default  reduce using rule 79 (PRINT)
+
+
+State 138
+
+   17 LOOPS: FOR '(' ASSIGN_EXPR $@3 ';' COND $@4 . ';' statement $@5 ')' LOOPBODY
+
+    ';'  shift, and go to state 148
+
+
+State 139
+
+   23 LOOPBODY: '{' LOOPC '}' .
+
+    $default  reduce using rule 23 (LOOPBODY)
+
+
+State 140
+
+   27 LOOPC: LOOPC LOOPS .
+
+    $default  reduce using rule 27 (LOOPC)
+
+
+State 141
+
+   26 LOOPC: LOOPC statement . ';'
+
+    ';'  shift, and go to state 149
+
+
+State 142
+
+   28 LOOPC: statement ';' .
+
+    $default  reduce using rule 28 (LOOPC)
+
+
+State 143
+
+   21 A: ELSE . LOOPBODY
+
+    ID     shift, and go to state 20
+    NUM    shift, and go to state 21
+    INT    shift, and go to state 23
+    CHAR   shift, and go to state 24
+    FLOAT  shift, and go to state 25
+    COUT   shift, and go to state 27
+    '{'    shift, and go to state 113
+    ';'    shift, and go to state 114
+    '('    shift, and go to state 29
+
+    LOOPBODY     go to state 150
+    statement    go to state 116
+    ASSIGN_EXPR  go to state 33
+    EXP          go to state 34
+    ADDSUB       go to state 35
+    TERM         go to state 36
+    FACTOR       go to state 37
+    PRINT        go to state 38
+    LIT          go to state 39
+    TYPE         go to state 40
+
+
+State 144
+
+   20 LOOPS: IF '(' COND ')' $@6 LOOPBODY $@7 A .
+
+    $default  reduce using rule 20 (LOOPS)
+
+
+State 145
+
+   52 F: T_eq $@16 LIT .
+
+    $default  reduce using rule 52 (F)
+
+
+State 146
+
+   48 B: V T_not $@14 T_eq $@15 LIT .
+
+    $default  reduce using rule 48 (B)
+
+
+State 147
+
+   41 B: V T_eq $@10 T_eq $@11 LIT .
+
+    $default  reduce using rule 41 (B)
+
+
+State 148
+
+   17 LOOPS: FOR '(' ASSIGN_EXPR $@3 ';' COND $@4 ';' . statement $@5 ')' LOOPBODY
+
+    ID     shift, and go to state 20
+    NUM    shift, and go to state 21
+    INT    shift, and go to state 23
+    CHAR   shift, and go to state 24
+    FLOAT  shift, and go to state 25
+    COUT   shift, and go to state 27
+    '('    shift, and go to state 29
+
+    statement    go to state 151
+    ASSIGN_EXPR  go to state 33
+    EXP          go to state 34
+    ADDSUB       go to state 35
+    TERM         go to state 36
+    FACTOR       go to state 37
+    PRINT        go to state 38
+    LIT          go to state 39
+    TYPE         go to state 40
+
+
+State 149
+
+   26 LOOPC: LOOPC statement ';' .
+
+    $default  reduce using rule 26 (LOOPC)
+
+
+State 150
+
+   21 A: ELSE LOOPBODY .
+
+    $default  reduce using rule 21 (A)
+
+
+State 151
+
+   17 LOOPS: FOR '(' ASSIGN_EXPR $@3 ';' COND $@4 ';' statement . $@5 ')' LOOPBODY
+
+    $default  reduce using rule 16 ($@5)
+
+    $@5  go to state 152
+
+
+State 152
+
+   17 LOOPS: FOR '(' ASSIGN_EXPR $@3 ';' COND $@4 ';' statement $@5 . ')' LOOPBODY
+
+    ')'  shift, and go to state 153
+
+
+State 153
+
+   17 LOOPS: FOR '(' ASSIGN_EXPR $@3 ';' COND $@4 ';' statement $@5 ')' . LOOPBODY
+
+    ID     shift, and go to state 20
+    NUM    shift, and go to state 21
+    INT    shift, and go to state 23
+    CHAR   shift, and go to state 24
+    FLOAT  shift, and go to state 25
+    COUT   shift, and go to state 27
+    '{'    shift, and go to state 113
+    ';'    shift, and go to state 114
+    '('    shift, and go to state 29
+
+    LOOPBODY     go to state 154
+    statement    go to state 116
+    ASSIGN_EXPR  go to state 33
+    EXP          go to state 34
+    ADDSUB       go to state 35
+    TERM         go to state 36
+    FACTOR       go to state 37
+    PRINT        go to state 38
+    LIT          go to state 39
+    TYPE         go to state 40
+
+
+State 154
+
+   17 LOOPS: FOR '(' ASSIGN_EXPR $@3 ';' COND $@4 ';' statement $@5 ')' LOOPBODY .
+
+    $default  reduce using rule 17 (LOOPS)

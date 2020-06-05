@@ -1,0 +1,36 @@
+i = 0
+T0 = a * b
+c = T0
+L0: 
+T1 = a > b   
+T2 = not T1
+if T2 goto L1
+T3 = a + 1
+a = T3
+goto L0 
+L1: 
+T4 = b <= c
+T5 = not T4
+if T5 goto L3
+a = 10
+goto L4
+L3: 
+a = 20
+L4: 
+a = 100
+i = 0
+L5: 
+T6 = i < 10   
+T7 = not T6
+if T7 goto L6
+goto L7
+L8: 
+T8 = i + 1
+i = T8
+goto L5 
+L7: 
+T9= a + 1
+a = T9
+goto L8 
+L6:
+
